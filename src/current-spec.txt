@@ -1,0 +1,22 @@
+Current old app:
+- Shell - keep everything together
+- Company info
+	- JobCard's company account
+	- General
+	- User management
+- Customers (CRM)
+	- CRUD Private Consumers
+	- CRUD Business Customers
+- Job Management
+	- Filter jobs
+	- CRUD Jobs
+		- General
+		- Problem + Feedback
+		- Time management
+		- Travel + Mileage
+		- Notes
+	- Reports
+		- Private Consumers (w/ tenants)
+		- Business Customers (w/ tenants)
+- Searching
+- Multi-tenancy	
