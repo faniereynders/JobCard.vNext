@@ -3,53 +3,24 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Azure.WebJobs.Host;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.WindowsAzure.Storage.Table;
 using System;
-using Microsoft.WindowsAzure.Storage;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Http.Extensions;
+using JobcardCloud.CustomerManagement.Entities;
+using JobcardCloud.CustomerManagement.Models;
 
-namespace JobcardCloud.Customers
+namespace JobcardCloud.CustomerManagement.Functions
 {
-    public class CustomerEntity:TableEntity
+    public static class CreateCustomer
     {
-        public string Type { get; set; }
-        public string Id { get; set; }
-    }
-
-    public class NewCustomerModel
-    {
-        public string Type { get; set; }
-        public string Id { get; set; }
-    }
-
-    public class CustomerModel
-    {
-        public string Id { get; set; }
-        public string CustomerId { get; set; }
-        public string TenantId { get; set; }
-        public string Type { get; set; }
-    }
-    public static class Customers
-    {
-        private static Uri GetUri(HttpRequest request)
-        {
-            var builder = new UriBuilder();
-            builder.Scheme = request.Scheme;
-            builder.Host = request.Host.Value;
-            builder.Path = request.Path;
-            builder.Query = request.QueryString.ToUriComponent();
-            return builder.Uri;
-        }
-        private const string route = "customers";
-
+        
         [FunctionName(nameof(CreateCustomer))]
-        public static async Task<IActionResult> CreateCustomer(
-            [HttpTrigger(AuthorizationLevel.Function, "post", Route = route)]HttpRequest req,
+        public static async Task<IActionResult> Run(
+            [HttpTrigger(AuthorizationLevel.Function, "post", Route = "customers")]HttpRequest req,
             [Table("customers")] IAsyncCollector<CustomerEntity> customersTable,
             [Table("customers")] CloudTable customersCloudTable,
             IBinder binder,
@@ -106,35 +77,7 @@ namespace JobcardCloud.Customers
         //    return new OkObjectResult(segment.Select(Mappings.ToTodo));
         //}
 
-        [FunctionName(nameof(GetCustomerById))]
-        public static async Task<IActionResult> GetCustomerById(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = route + "/{id}")]HttpRequest req,
-            IBinder binder,
-            ILogger log, string id)
-        {
-            if (!req.Headers.ContainsKey("X-TenantId"))
-            {
-                return new BadRequestObjectResult(new { error = "Tenant is required." });
-            }
-            var tenantId = req.Headers["X-TenantId"];
-            
-
-            TableAttribute dynamicTableBinding = new TableAttribute("customers", tenantId, "{id}");
-            var customer = await binder.BindAsync<CustomerEntity>(dynamicTableBinding);
-            log.LogInformation("Getting customer item by id");
-            if (customer == null)
-            {
-                log.LogInformation($"Customer {id} not found");
-                return new NotFoundResult();
-            }
-            var result = new CustomerModel
-            {
-                Id = customer.RowKey,
-                TenantId = customer.PartitionKey,
-                Type = customer.Type
-            };
-            return new OkObjectResult(result);
-        }
+       
 
         //[FunctionName("Table_UpdateTodo")]
         //public static async Task<IActionResult> UpdateTodo(
