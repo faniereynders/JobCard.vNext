@@ -1,0 +1,11 @@
+POST http://localhost:7071/api/customers
+X-TenantId: test
+
+{
+    "type":"Person",
+    "id":"4"
+}
+
+###
+http://localhost:7071/api/customers/fe4316b9-0cfc-4fa1-88ef-ad90dd41df89
+X-TenantId: test
