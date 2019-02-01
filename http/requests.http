@@ -1,11 +1,12 @@
 POST http://localhost:7071/api/customers
-X-TenantId: test
+X-TenantId: awesomeinc
 
 {
     "type":"Person",
-    "id":"4"
+    "id":"8001015144588",
+    "email":"dddddddd"
 }
 
 ###
-http://localhost:7071/api/customers/fe4316b9-0cfc-4fa1-88ef-ad90dd41df89
-X-TenantId: test
+http://localhost:7071/api/customers/3a5f3ca1-b903-463a-ad4d-f743288f51d1
+X-TenantId: awesomeinc

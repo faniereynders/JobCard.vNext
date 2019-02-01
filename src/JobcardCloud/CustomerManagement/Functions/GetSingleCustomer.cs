@@ -32,6 +32,8 @@ namespace JobcardCloud.Customers.Functions
                 log.LogInformation($"Customer {id} not found");
                 return new NotFoundResult();
             }
+
+            //TODO: automapper
             var result = new CustomerModel
             {
                 Id = customer.RowKey,

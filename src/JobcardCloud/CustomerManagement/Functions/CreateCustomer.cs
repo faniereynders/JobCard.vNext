@@ -12,6 +12,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Http.Extensions;
 using JobcardCloud.CustomerManagement.Entities;
 using JobcardCloud.CustomerManagement.Models;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace JobcardCloud.CustomerManagement.Functions
 {
@@ -27,14 +29,32 @@ namespace JobcardCloud.CustomerManagement.Functions
             ILogger log)
         {
             var tenantId = req.Headers["X-TenantId"];
+            //TODO: validate if tenant exists
+
 
             
+
+
 
             log.LogInformation("Creating a new customer item");
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             var input = JsonConvert.DeserializeObject<NewCustomerModel>(requestBody);
 
-            
+
+
+            var results = new List<ValidationResult>();
+            var isValid = Validator.TryValidateObject(input, new ValidationContext(input, null, null), results, true);
+
+
+            if (!isValid)
+            {
+                return new BadRequestObjectResult(results);
+            }
+
+
+
+
+            //TODO: Move to validator later
             var query = new TableQuery<CustomerEntity>();
             var customersWithIdCount = query.Where(TableQuery.CombineFilters(
                     TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal,
@@ -46,12 +66,16 @@ namespace JobcardCloud.CustomerManagement.Functions
 
             var count = await customersCloudTable.ExecuteQuerySegmentedAsync(query, null);
 
-            
+            //TODO: Check if customer already exists
             if (count.Any())
             {
                 return new BadRequestObjectResult(new { error = "Customer already exists." });
             }
 
+            
+            
+            
+            //TODO: introduce automapper to map dto to domain and vice versa
             var newCustomer = new CustomerEntity() { PartitionKey = tenantId, RowKey = Guid.NewGuid().ToString(), Type = input.Type,Id = input.Id };
             await customersTable.AddAsync(newCustomer);
             var result = new CustomerModel
