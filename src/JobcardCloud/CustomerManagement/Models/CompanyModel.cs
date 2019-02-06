@@ -1,7 +1,4 @@
 ﻿using JobcardCloud.CustomerManagement.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace JobcardCloud.Customers.Models
 {

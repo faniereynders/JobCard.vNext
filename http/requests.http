@@ -3,10 +3,15 @@ X-TenantId: awesomeinc
 
 {
     "type":"Person",
-    "id":"8001015144588",
-    "email":"dddddddd"
+    "personIdNumber":"8001015144588",
+    "email":"ddd@ddddd.com",
+    "name":"Test",
+    "accountNumber": "234243",
+    "postalAddress":"sdfsdfs",
+    "residentialAddress":"sdfsdfs",
+    "telephone1":"234234"
 }
 
 ###
-http://localhost:7071/api/customers/3a5f3ca1-b903-463a-ad4d-f743288f51d1
+http://localhost:7071/api/customers/9d378b70-7cf1-466e-b905-19c8f752910b
 X-TenantId: awesomeinc

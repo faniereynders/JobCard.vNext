@@ -7,18 +7,24 @@ using Newtonsoft.Json;
 using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.WindowsAzure.Storage.Table;
-using System;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Http.Extensions;
 using JobcardCloud.CustomerManagement.Entities;
 using JobcardCloud.CustomerManagement.Models;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using AutoMapper;
+using ValidationContext = System.ComponentModel.DataAnnotations.ValidationContext;
+using JobcardCloud.Customers.Mappings;
 
 namespace JobcardCloud.CustomerManagement.Functions
 {
     public static class CreateCustomer
     {
+        static CreateCustomer()
+        {
+            AutoMapper.Mapper.Initialize(c => c.AddProfile<CustomerProfile>());
+        }
         
         [FunctionName(nameof(CreateCustomer))]
         public static async Task<IActionResult> Run(
@@ -26,6 +32,7 @@ namespace JobcardCloud.CustomerManagement.Functions
             [Table("customers")] IAsyncCollector<CustomerEntity> customersTable,
             [Table("customers")] CloudTable customersCloudTable,
             IBinder binder,
+           // [Inject]IMapper mapper,
             ILogger log)
         {
             var tenantId = req.Headers["X-TenantId"];
@@ -35,15 +42,26 @@ namespace JobcardCloud.CustomerManagement.Functions
             
 
 
-
             log.LogInformation("Creating a new customer item");
+
+            
+
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            var input = JsonConvert.DeserializeObject<NewCustomerModel>(requestBody);
-
-
-
             var results = new List<ValidationResult>();
-            var isValid = Validator.TryValidateObject(input, new ValidationContext(input, null, null), results, true);
+            var isValid = true;
+
+            //TODO Use smarter serialization
+            var input = JsonConvert.DeserializeObject<NewCustomerModelBase>(requestBody);
+            if (input.Type == "Person")
+            {
+                input = JsonConvert.DeserializeObject<NewPersonCustomerModel>(requestBody);
+                isValid = Validator.TryValidateObject(input, new ValidationContext(input, null, null), results, true);
+            }
+            else
+            {
+                input = JsonConvert.DeserializeObject<NewCompanyCustomerModel>(requestBody);
+                isValid = Validator.TryValidateObject(input, new ValidationContext(input, null, null), results, true);
+            }
 
 
             if (!isValid)
@@ -54,14 +72,14 @@ namespace JobcardCloud.CustomerManagement.Functions
 
 
 
-            //TODO: Move to validator later
+            //TODO: Move to validator later - IValidatableObject
             var query = new TableQuery<CustomerEntity>();
             var customersWithIdCount = query.Where(TableQuery.CombineFilters(
                     TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal,
                         tenantId),
                     TableOperators.And,
-                    TableQuery.GenerateFilterCondition("Id", QueryComparisons.Equal,
-                        input.Id)))
+                    TableQuery.GenerateFilterCondition("CustomerId", QueryComparisons.Equal,
+                        input.CustomerId)))
                  .TakeCount;
 
             var count = await customersCloudTable.ExecuteQuerySegmentedAsync(query, null);
@@ -72,18 +90,30 @@ namespace JobcardCloud.CustomerManagement.Functions
                 return new BadRequestObjectResult(new { error = "Customer already exists." });
             }
 
+            input.TenantId = tenantId;
+
+
             
-            
-            
-            //TODO: introduce automapper to map dto to domain and vice versa
-            var newCustomer = new CustomerEntity() { PartitionKey = tenantId, RowKey = Guid.NewGuid().ToString(), Type = input.Type,Id = input.Id };
-            await customersTable.AddAsync(newCustomer);
+            var newCustomerEntity = default(CustomerEntity);
+            if (input.Type == "Person")
+            {
+                newCustomerEntity = Mapper.Map<PersonCustomerEntity>(input);
+            }
+            else if (input.Type == "Company")
+            {
+                newCustomerEntity = Mapper.Map<CompanyCustomerEntity>(input);
+            }
+
+
+
+            //TODO: Move to repo
+            await customersTable.AddAsync(newCustomerEntity);
             var result = new CustomerModel
             {
-                Id = newCustomer.RowKey,
-                CustomerId = newCustomer.Id,
-                TenantId = newCustomer.PartitionKey,
-                Type = newCustomer.Type
+                Id = newCustomerEntity.RowKey,
+                CustomerId = input.CustomerId,
+                TenantId = newCustomerEntity.PartitionKey,
+                Type = input.Type
             };
             return new CreatedResult($"{req.GetDisplayUrl()}/{result.Id}", result);
         }
