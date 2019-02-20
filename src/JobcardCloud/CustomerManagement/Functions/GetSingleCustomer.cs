@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 
 namespace JobcardCloud.Customers.Functions
 {
-    public static class GetSingleCustomer
+    public class GetSingleCustomer
     {
         [FunctionName(nameof(GetSingleCustomer))]
-        public static async Task<IActionResult> GetCustomerById(
+        public async Task<IActionResult> GetCustomerById(
            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "customers/{id}")]HttpRequest req,
            IBinder binder,
            ILogger log, string id)

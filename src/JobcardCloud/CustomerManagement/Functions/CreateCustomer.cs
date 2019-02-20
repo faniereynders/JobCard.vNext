@@ -19,20 +19,21 @@ using JobcardCloud.Customers.Mappings;
 
 namespace JobcardCloud.CustomerManagement.Functions
 {
-    public static class CreateCustomer
+    public class CreateCustomer
     {
-        static CreateCustomer()
+        private readonly IMapper mapper;
+
+        public CreateCustomer(IMapper mapper)
         {
-            AutoMapper.Mapper.Initialize(c => c.AddProfile<CustomerProfile>());
+            this.mapper = mapper;
         }
         
         [FunctionName(nameof(CreateCustomer))]
-        public static async Task<IActionResult> Run(
+        public async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = "customers")]HttpRequest req,
             [Table("customers")] IAsyncCollector<CustomerEntity> customersTable,
             [Table("customers")] CloudTable customersCloudTable,
             IBinder binder,
-           // [Inject]IMapper mapper,
             ILogger log)
         {
             var tenantId = req.Headers["X-TenantId"];
@@ -97,11 +98,11 @@ namespace JobcardCloud.CustomerManagement.Functions
             var newCustomerEntity = default(CustomerEntity);
             if (input.Type == "Person")
             {
-                newCustomerEntity = Mapper.Map<PersonCustomerEntity>(input);
+                newCustomerEntity = mapper.Map<PersonCustomerEntity>(input);
             }
             else if (input.Type == "Company")
             {
-                newCustomerEntity = Mapper.Map<CompanyCustomerEntity>(input);
+                newCustomerEntity = mapper.Map<CompanyCustomerEntity>(input);
             }
 
 
