@@ -15,3 +15,19 @@ X-TenantId: awesomeinc
 ###
 http://localhost:7071/api/customers/9d378b70-7cf1-466e-b905-19c8f752910b
 X-TenantId: awesomeinc
+
+###
+POST http://localhost:7071/api/customers
+X-TenantId: awesomeinc
+Content-Type: application/json
+
+{
+    "type":"Person",
+    "personIdNumber":"80010151445899",
+    "email":"ddd@ddddd.com",
+    "name":"Test",
+    "accountNumber": "234243",
+    "postalAddress":"sdfsdfs",
+    "residentialAddress":"sdfsdfs",
+    "telephone1":"234234"
+}
