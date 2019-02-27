@@ -11,6 +11,10 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.WindowsAzure.Storage.Table;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Azure.Documents.Client;
+using JobcardCloud.CustomerManagement.Models;
+using AutoMapper;
+using JobcardCloud.CustomerManagement.Entities;
 
 public class FunctionAppConfiguration : IFunctionAppConfiguration
 {
@@ -39,11 +43,16 @@ public class FunctionAppConfiguration : IFunctionAppConfiguration
                         return storageAccount.CreateCloudTableClient();
 
                     })
-                    .AddTransient<IValidator<CreatePersonCustomerCommand>, CreatePersonCustomerCommandValidator>();
+                    .AddSingleton<DocumentDBRepository<CustomerEntity>>()
+                    .AddTransient<IValidator<CreatePersonCustomerCommand>, CreatePersonCustomerCommandValidator>()
+                    .AddAutoMapper()
+                    ;
+
                 commandRegistry.Register<CreatePersonCustomerCommandHandler>();
             })
             .AddFluentValidation()
             .Functions(functions => functions
+                //.CosmosDb("Customers", cosmos => cosmos.)
                 .HttpRoute("/api/customers", route => route
                     .HttpFunction<CreatePersonCustomerCommand>(HttpMethod.Post)
                     .Options(o => o.AddHeaderMapping(c => c.TenantId, "X-TenantId"))

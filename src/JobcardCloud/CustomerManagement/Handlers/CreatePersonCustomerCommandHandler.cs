@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using AzureFromTheTrenches.Commanding.Abstractions;
 using JobcardCloud.CustomerManagement.Commands;
 using JobcardCloud.CustomerManagement.Entities;
@@ -12,13 +13,19 @@ namespace JobcardCloud.CustomerManagement.Handlers
 {
     internal class CreatePersonCustomerCommandHandler : ICommandHandler<CreatePersonCustomerCommand, CustomerModel>
     {
+        private readonly DocumentDBRepository<CustomerEntity> customersRepository;
+        private readonly IMapper mapper;
+
         // private readonly ILogger logger;
 
-        // public CreatePersonCustomerCommandHandler(ILogger logger)
-        // {
-        //     this.logger = logger;
-        // }
-        public Task<CustomerModel> ExecuteAsync(CreatePersonCustomerCommand command, CustomerModel previousResult)
+        public CreatePersonCustomerCommandHandler(
+          DocumentDBRepository<CustomerEntity> customersRepository,
+          IMapper mapper)
+        {
+            this.customersRepository = customersRepository;
+            this.mapper = mapper;
+        }
+        public async Task<CustomerModel> ExecuteAsync(CreatePersonCustomerCommand command, CustomerModel previousResult)
         {
             
           //   logger.LogInformation("Creating a new customer item");
@@ -80,8 +87,12 @@ namespace JobcardCloud.CustomerManagement.Handlers
 //                 Type = input.Type
 //             };
 //             return new CreatedResult($"{req.GetDisplayUrl()}/{result.Id}", result);
-            var model = new CustomerModel();
-            return Task.FromResult(model);
+            var newCustomer = mapper.Map<CustomerEntity>(command);
+            var result = await customersRepository.CreateItemAsync(newCustomer);
+            
+            
+            var model = mapper.Map<CustomerModel>(result);
+            return model;
         }
     }
 }

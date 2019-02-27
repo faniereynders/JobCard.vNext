@@ -2,7 +2,11 @@
 
 namespace JobcardCloud.CustomerManagement.Entities
 {
-    public class CustomerEntity:TableEntity
+    public class EntityBase
+    {
+        public string TenantId { get; set; } 
+    }
+    public class CustomerEntity:EntityBase
     {
         public string Type { get; set; }
         public string CustomerId { get; set; }

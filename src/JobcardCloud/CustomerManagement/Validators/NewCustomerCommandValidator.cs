@@ -27,14 +27,14 @@ namespace JobcardCloud.CustomerManagement.Validators
             RuleFor(x => x.ResidentialAddress).NotEmpty();
             RuleFor(x => x.Telephone1).NotEmpty();
             RuleFor(x => x.Email).EmailAddress();
-            RuleFor(x=>x).CustomAsync(async (customer,context,c)=>
-            {
+    //         RuleFor(x=>x).CustomAsync((customer,context,c)=>
+    //         {
                 
-              // CloudStorageAccount storageAccount = CloudStorageAccount.Parse("UseDevelopmentStorage=true");
+    //           // CloudStorageAccount storageAccount = CloudStorageAccount.Parse("UseDevelopmentStorage=true");
 
-    // tableClient = storageAccount.CreateCloudTableClient();
+    // // tableClient = storageAccount.CreateCloudTableClient();
 
-    var customersCloudTable = tableClient.GetTableReference("customers");
+    // var customersCloudTable = tableClient.GetTableReference("customers");
 
 
 
@@ -42,26 +42,26 @@ namespace JobcardCloud.CustomerManagement.Validators
 
              
 
-                var query = new TableQuery<CustomerEntity>();
-                var customersWithIdCount = query.Where(TableQuery.CombineFilters(
-                        TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal,
-                            customer.TenantId),
-                        TableOperators.And,
-                        TableQuery.GenerateFilterCondition("CustomerId", QueryComparisons.Equal,
-                            customer.CustomerId)))
-                    .TakeCount;
+    //             // var query = new TableQuery<CustomerEntity>();
+    //             // var customersWithIdCount = query.Where(TableQuery.CombineFilters(
+    //             //         TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal,
+    //             //             customer.TenantId),
+    //             //         TableOperators.And,
+    //             //         TableQuery.GenerateFilterCondition("CustomerId", QueryComparisons.Equal,
+    //             //             customer.CustomerId)))
+    //             //     .TakeCount;
 
-              var count = await customersCloudTable.ExecuteQuerySegmentedAsync(query, null);
+    //           //var count = await customersCloudTable.ExecuteQuerySegmentedAsync(query, null);
 
-    //             //TODO: Check if customer already exists
-                if (count.Any())
-                {
-                    context.AddFailure("Customer already exists");
-                }
-               // return new Vali
+    // //             //TODO: Check if customer already exists
+    //           //  if (count.Any())
+    //             {
+    //          //       context.AddFailure("Customer already exists");
+    //             }
+    //            // return new Vali
 
-               //Task.CompletedTask;
-            });
+    //            //Task.CompletedTask;
+    //         });
             this.tableClient = tableClient;
         }
     }
