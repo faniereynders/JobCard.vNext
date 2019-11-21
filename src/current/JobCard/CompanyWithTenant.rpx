@@ -1,0 +1,145 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ActiveReportsLayout Version="3.1" PrintWidth="10095" DocumentName="ARNet Document" ScriptLang="C#" MasterReport="0">
+  <StyleSheet>
+    <Style Name="Normal" Value="font-family: Arial; font-style: normal; text-decoration: none; font-weight: normal; color: Black; ddo-char-set: 204; font-size: 9pt; " />
+    <Style Name="Heading1" Value="font-size: 16pt; font-weight: bold; " />
+    <Style Name="Heading2" Value="font-family: Times New Roman; font-size: 14pt; font-weight: bold; font-style: italic; " />
+    <Style Name="Heading3" Value="font-size: 13pt; font-weight: bold; " />
+  </StyleSheet>
+  <Sections>
+    <Section Type="PageHeader" Name="PageHeader1" Height="2669" BackColor="16777215">
+      <Control Type="AR.Shape" Name="Shape1" Left="7560" Top="0" Width="2520" Height="1080" BackColor="14474460" BackStyle="1" Shape="2" RoundingRadius="20" />
+      <Control Type="AR.Image" Name="imgLogo" DataField="Logo" Left="0" Top="0" Width="6912" Height="1440" LineColor="16777215" LineWeight="0" HyperLink="" SizeMode="2" />
+      <Control Type="AR.Field" Name="TextBox2" DataField="Contact" Left="5256" Top="1440" Width="4824" Height="1008" Text="Address, Postal, Tels" Style="ddo-char-set: 0; text-align: right; font-size: 8.25pt; " />
+      <Control Type="AR.Label" Name="Label2" Left="7650" Top="90" Width="2520" Height="540" Caption="JOB CARD" Style="color: Black; ddo-char-set: 0; text-align: left; font-size: 20.25pt; font-family: Arial Black; " />
+      <Control Type="AR.Field" Name="TextBox1" DataField="JobNr" Left="7650" Top="630" Width="2340" Height="360" Text="TextBox1" Style="text-align: right; font-weight: bold; font-size: 9.75pt; " />
+      <Control Type="AR.Field" Name="TextBox3" DataField="CompanyName" Left="0" Top="1440" Width="5184" Height="576.0001" Text="BRANCH" Style="font-weight: bold; font-size: 9pt; " />
+      <Control Type="AR.Field" Name="TextBox4" DataField="TradingAs" Left="0" Top="2016" Width="5184" Height="216" Text="t/a" Style="font-size: 8.25pt; " />
+      <Control Type="AR.Field" Name="TextBox5" DataField="RegNr" Left="0" Top="2232" Width="5184" Height="216" Text="CC Reg" Style="font-size: 8.25pt; " />
+      <Control Type="AR.Field" Name="TextBox6" DataField="VatNr" Left="0" Top="2448" Width="5184" Height="216.0001" Text="VAT Reg" Style="font-size: 8.25pt; " />
+    </Section>
+    <Section Type="Detail" Name="Detail1" Height="11190" BackColor="16777215">
+      <Control Type="AR.Shape" Name="Shape2" Left="0" Top="0" Width="10080" Height="11160" BackColor="16777215" Shape="2" RoundingRadius="5" />
+      <Control Type="AR.Label" Name="lblCompleted" DataField="Completed" Left="72" Top="432" Width="10728" Height="10008" Caption="COMPLETED" Style="color: Gainsboro; font-weight: bold; font-size: 84.75pt; " Angle="400" />
+      <Control Type="AR.Shape" Name="Shape6" Left="0" Top="6552" Width="10080" Height="360" BackColor="14474460" BackStyle="1" RoundingRadius="9.999999" />
+      <Control Type="AR.Shape" Name="Shape3" Left="0" Top="360" Width="10080" Height="360" BackColor="14474460" BackStyle="1" RoundingRadius="9.999999" />
+      <Control Type="AR.Label" Name="Label1" Left="72" Top="72" Width="720" Height="288" Caption="DATE:" Style="font-size: 9pt; " />
+      <Control Type="AR.Field" Name="TextBox8" DataField="Date" Left="792" Top="72" Width="1440" Height="285.0001" Text="JobDate" Style="font-size: 9pt; " />
+      <Control Type="AR.Field" Name="TextBox9" DataField="Team" Left="5256" Top="72" Width="4680" Height="288" Text="Team" Style="font-size: 9pt; " />
+      <Control Type="AR.Label" Name="Label3" Left="3528" Top="72" Width="1728" Height="288" Caption="TEAM ALLOCATED:" Style="font-size: 9pt; " />
+      <Control Type="AR.Line" Name="Line1" X1="0" Y1="360" X2="10080" Y2="360" />
+      <Control Type="AR.Line" Name="Line2" X1="3456" Y1="0" X2="3456" Y2="360" />
+      <Control Type="AR.Label" Name="Label4" Left="72" Top="432" Width="2664" Height="288" Caption="CUSTOMER DETAILS:" Style="font-weight: bold; font-size: 8.25pt; " />
+      <Control Type="AR.Label" Name="Label5" Left="72" Top="792" Width="1872" Height="288" Caption="ACCOUNT NUMBER:" />
+      <Control Type="AR.Field" Name="TextBox10" DataField="CustomerAccount" Left="1944" Top="792" Width="1512" Height="288" Text="AccountNr" />
+      <Control Type="AR.Field" Name="TextBox11" DataField="CustomerName" Left="4248" Top="792" Width="5688" Height="288" Text="CustomerName" />
+      <Control Type="AR.Label" Name="Label6" Left="3528" Top="792" Width="647.9999" Height="288" Caption="NAME:" />
+      <Control Type="AR.Label" Name="Label8" Left="72" Top="1152" Width="720" Height="288" Caption="E-MAIL:" />
+      <Control Type="AR.Field" Name="TextBox13" DataField="CustomerEmail" Left="792" Top="1152" Width="2664" Height="288" Text="E-Mail" />
+      <Control Type="AR.Label" Name="Label9" Left="3528" Top="1152" Width="2448" Height="288" Caption="RESIDENTIAL ADDRESS:" />
+      <Control Type="AR.Field" Name="TextBox7" DataField="CustomerResidential" Left="3528" Top="1440" Width="6480" Height="288" Text="Residential Address" />
+      <Control Type="AR.Field" Name="TextBox14" DataField="CustomerPOBox" Left="3528" Top="2088" Width="6480" Height="503.9999" Text="Residential Address" />
+      <Control Type="AR.Label" Name="Label10" Left="3528" Top="1800" Width="2448" Height="288" Caption="POSTAL ADDRESS:" />
+      <Control Type="AR.Label" Name="Label11" Left="72" Top="1440" Width="720" Height="288" Caption="TEL 1:" />
+      <Control Type="AR.Field" Name="TextBox15" DataField="CustomerTel1" Left="792" Top="1440" Width="2664" Height="288" Text="Tel 1" />
+      <Control Type="AR.Field" Name="TextBox16" DataField="CustomerTel2" Left="792" Top="1728" Width="2664" Height="288" Text="Tel 2" />
+      <Control Type="AR.Label" Name="Label12" Left="72" Top="1728" Width="720" Height="288" Caption="TEL 2:" />
+      <Control Type="AR.Field" Name="TextBox17" DataField="CustomerCell" Left="792" Top="2016" Width="2664" Height="288" Text="Cell" />
+      <Control Type="AR.Label" Name="Label13" Left="72" Top="2016" Width="720" Height="288" Caption="CELL:" />
+      <Control Type="AR.Field" Name="TextBox18" DataField="CustomerFax" Left="792" Top="2304" Width="2664" Height="288" Text="Fax" />
+      <Control Type="AR.Label" Name="Label14" Left="72" Top="2304" Width="720" Height="288" Caption="FAX:" />
+      <Control Type="AR.Line" Name="Line3" X1="0" Y1="2592" X2="10080" Y2="2592" />
+      <Control Type="AR.Line" Name="Line4" X1="0" Y1="1080" X2="10080" Y2="1080" />
+      <Control Type="AR.Line" Name="Line5" X1="3456" Y1="1728" X2="10080" Y2="1728" />
+      <Control Type="AR.Line" Name="Line6" X1="3456" Y1="720" X2="3456" Y2="3744" />
+      <Control Type="AR.Shape" Name="Shape4" Left="0" Top="3744" Width="10080" Height="360" BackColor="14474460" BackStyle="1" RoundingRadius="9.999999" />
+      <Control Type="AR.Label" Name="Label15" Left="72" Top="3816" Width="2664" Height="288" Caption="JOB DESCRIPTION:" Style="font-weight: bold; font-size: 8.25pt; " />
+      <Control Type="AR.Label" Name="Label16" Left="72" Top="5688" Width="2448" Height="288" Caption="ADDRESS OF PROBLEM:" />
+      <Control Type="AR.Field" Name="TextBox19" DataField="JobAddress" Left="72" Top="5904" Width="3312" Height="647.9999" Text="Residential Address" Style="font-size: 8.25pt; " />
+      <Control Type="AR.Line" Name="Line8" X1="4896" Y1="4104" X2="4896" Y2="5688" />
+      <Control Type="AR.Line" Name="Line9" X1="0" Y1="5616" X2="10080" Y2="5616" />
+      <Control Type="AR.Label" Name="Label17" Left="72" Top="4176" Width="2448" Height="288" Caption="PROBLEM:" />
+      <Control Type="AR.Field" Name="TextBox20" DataField="JobProblem" Left="72" Top="4392" Width="4752" Height="1224" Text="Problems" Style="font-size: 8.25pt; " />
+      <Control Type="AR.Field" Name="TextBox21" DataField="JobFeedback" Left="4968" Top="4392" Width="5040" Height="1224" Text="Feedback" Style="font-size: 8.25pt; " />
+      <Control Type="AR.Label" Name="Label18" Left="4968" Top="4176" Width="2448" Height="288" Caption="FEEDBACK:" />
+      <Control Type="AR.Shape" Name="Shape5" Left="3456" Top="5616" Width="6624" Height="360" BackColor="14474460" BackStyle="1" RoundingRadius="9.999999" />
+      <Control Type="AR.Label" Name="Label19" Left="3528" Top="5688" Width="6480" Height="288.0002" Caption="THIS PROPERTY IS RENTED OUT BY THE FOLLOWING TENANT:" Style="font-weight: bold; font-size: 8.25pt; " />
+      <Control Type="AR.Label" Name="Label20" Left="3528" Top="5976" Width="648" Height="288" Caption="NAME:" />
+      <Control Type="AR.Field" Name="TextBox22" DataField="TenantName" Left="4248" Top="5976" Width="3312" Height="288" Text="CustomerName" />
+      <Control Type="AR.Line" Name="Line10" X1="3456" Y1="5616" X2="3456" Y2="6552" />
+      <Control Type="AR.Label" Name="Label21" Left="7848" Top="5976" Width="648" Height="288" Caption="ID NR:" />
+      <Control Type="AR.Field" Name="TextBox23" DataField="TenantID" Left="8568" Top="5976" Width="1440" Height="288" Text="9999999999999" />
+      <Control Type="AR.Label" Name="Label22" Left="3528" Top="6264" Width="720" Height="288" Caption="TEL:" />
+      <Control Type="AR.Field" Name="TextBox24" DataField="TenantTel" Left="4248" Top="6264" Width="3312" Height="287.9998" Text="0000000000" />
+      <Control Type="AR.Label" Name="Label24" Left="7848" Top="6264" Width="720" Height="288" Caption="CELL:" />
+      <Control Type="AR.Field" Name="TextBox26" DataField="TenantCell" Left="8568" Top="6264" Width="1440" Height="287.9998" />
+      <Control Type="AR.Line" Name="Line11" X1="0" Y1="7920" X2="10080" Y2="7920" />
+      <Control Type="AR.Label" Name="Label23" Left="72" Top="6624" Width="2664" Height="288" Caption="TIMESHEET:" Style="font-weight: bold; font-size: 8.25pt; " />
+      <Control Type="AR.Label" Name="Label25" Left="72" Top="6912" Width="1152" Height="216.0001" Caption="START TIME:" Style="font-size: 8.25pt; " />
+      <Control Type="AR.Label" Name="Label26" Left="1944" Top="6912" Width="935.9999" Height="216.0001" Caption="END TIME:" Style="font-size: 8.25pt; " />
+      <Control Type="AR.Label" Name="Label27" Left="3528" Top="6912" Width="1368" Height="216.0001" Caption="TOTAL HOURS:" Style="font-size: 8.25pt; " />
+      <Control Type="AR.Line" Name="Line13" X1="1728" Y1="6912" X2="1728" Y2="7920" />
+      <Control Type="AR.Line" Name="Line14" X1="3456" Y1="6912" X2="3456" Y2="7920" />
+      <Control Type="AR.Label" Name="Label28" Left="4968" Top="6624" Width="2664" Height="288" Caption="TRAVEL:" Style="font-weight: bold; font-size: 8.25pt; " />
+      <Control Type="AR.Label" Name="Label29" Left="4968" Top="6912" Width="1152" Height="216.0001" Caption="DATE:" Style="font-size: 8.25pt; " />
+      <Control Type="AR.Label" Name="Label30" Left="6192" Top="6912" Width="935.9999" Height="216.0001" Caption="START KM" Style="font-size: 8.25pt; " />
+      <Control Type="AR.Label" Name="Label31" Left="7416" Top="6912" Width="935.9999" Height="216.0001" Caption="END KM:" Style="font-size: 8.25pt; " />
+      <Control Type="AR.Line" Name="Line16" X1="6120" Y1="6912" X2="6120" Y2="7920" />
+      <Control Type="AR.Line" Name="Line17" X1="7344" Y1="6912" X2="7344" Y2="7920" />
+      <Control Type="AR.Line" Name="Line12" X1="8568" Y1="6912" X2="8568" Y2="7920" />
+      <Control Type="AR.Label" Name="Label32" Left="8640" Top="6912" Width="1440" Height="216.0001" Caption="VEHICLE REG #:" Style="font-size: 8.25pt; " />
+      <Control Type="AR.Field" Name="TextBox25" DataField="TimeStart" Left="72" Top="7128" Width="1440" Height="791.9998" Style="font-size: 8.25pt; " />
+      <Control Type="AR.Field" Name="TextBox27" DataField="TimeEnd" Left="1944" Top="7128" Width="1440" Height="791.9998" Style="font-size: 8.25pt; " />
+      <Control Type="AR.Field" Name="TextBox28" DataField="TimeTotal" Left="3528" Top="7128" Width="1296" Height="791.9998" Style="font-size: 8.25pt; " />
+      <Control Type="AR.Field" Name="TextBox29" DataField="TravelDate" Left="4968" Top="7128" Width="1080" Height="791.9998" Style="font-size: 8.25pt; " />
+      <Control Type="AR.Field" Name="TextBox30" DataField="TravelStartKM" Left="6192" Top="7128" Width="1152" Height="791.9998" Style="font-size: 8.25pt; " />
+      <Control Type="AR.Field" Name="TextBox31" DataField="TravelEndKM" Left="7416" Top="7128" Width="1152" Height="791.9998" Style="font-size: 8.25pt; " />
+      <Control Type="AR.Field" Name="TextBox32" DataField="TravelVehicleRegNr" Left="8640" Top="7128" Width="1440" Height="791.9998" Style="font-size: 8.25pt; " />
+      <Control Type="AR.Line" Name="Line15" X1="0" Y1="6912" X2="10080" Y2="6912" />
+      <Control Type="AR.Label" Name="Label33" Left="72" Top="7992.001" Width="1800" Height="288.0002" Caption="QUOTED AMOUNT:" />
+      <Control Type="AR.Field" Name="TextBox33" DataField="JobQuoteAmount" Left="1944" Top="7992.001" Width="1512" Height="288" Text="quote" />
+      <Control Type="AR.Label" Name="Label34" Left="4968" Top="7992.001" Width="1080" Height="288.0002" Caption="GATE FEE:" />
+      <Control Type="AR.Field" Name="TextBox34" DataField="GateFee" Left="6048" Top="7992.001" Width="1152" Height="288.0002" Text="GateFee" />
+      <Control Type="AR.Field" Name="TextBox35" DataField="GateFeeQty" Left="8352.001" Top="7992.001" Width="1152" Height="288.0002" Text="qty" />
+      <Control Type="AR.Label" Name="Label35" Left="7272" Top="7992.001" Width="1080" Height="288.0002" Caption="QUANTITY:" />
+      <Control Type="AR.Line" Name="Line18" X1="4896" Y1="6552" X2="4896" Y2="8280" />
+      <Control Type="AR.Line" Name="Line19" X1="0" Y1="8280" X2="10080" Y2="8280" />
+      <Control Type="AR.Label" Name="Label36" Left="72" Top="8280" Width="1800" Height="288.0002" Caption="INVOICE NUMBER:" />
+      <Control Type="AR.Field" Name="TextBox36" DataField="InvoiceNr" Left="1944" Top="8280" Width="1872" Height="288.0003" Text="AccountNr" />
+      <Control Type="AR.Label" Name="Label37" Left="4032" Top="8280" Width="1800" Height="288.0002" Caption="PAYMENT METHOD:" />
+      <Control Type="AR.Field" Name="TextBox37" DataField="PaymentMethod" Left="5904" Top="8280" Width="1512" Height="288" Text="Pay method" />
+      <Control Type="AR.Line" Name="Line20" X1="0" Y1="8568" X2="10080" Y2="8568" />
+      <Control Type="AR.Label" Name="Label38" Left="72" Top="9936" Width="9936" Height="647.9998" Caption="I the undersigned tenant clarify that the work is done to my satisfaction. I understand that by signing I will be held liable for any outstanding payment(s) on this account if not paid by owner within 7 (seven) days of presentation thereof. Any disputes of payment(s) will be between owner and tenant." Style="font-size: 8.25pt; " />
+      <Control Type="AR.Label" Name="Label39" Left="72" Top="10728" Width="1008" Height="288.0002" Caption="Signature:" />
+      <Control Type="AR.Line" Name="Line21" X1="1080" Y1="10944" X2="4896" Y2="10944" LineStyle="3" />
+      <Control Type="AR.Line" Name="Line22" X1="5688" Y1="10944" X2="9504.001" Y2="10944" LineStyle="3" />
+      <Control Type="AR.Label" Name="Label40" Left="5040" Top="10728" Width="576.0003" Height="288.0002" Caption="Date:" />
+      <Control Type="AR.Label" Name="Label41" Left="5832" Top="10656" Width="2376" Height="288" Caption="DD  /    MM    /  YYCC" Style="color: LightGrey; " />
+      <Control Type="AR.Line" Name="Line23" X1="0" Y1="9936" X2="10080" Y2="9936" />
+      <Control Type="AR.Label" Name="Label42" Left="72" Top="8568" Width="1800" Height="288.0002" Caption="NOTES:" />
+      <Control Type="AR.Field" Name="txtNotes" DataField="Notes" Left="72" Top="8784.001" Width="9936" Height="1152" Text="TextBox38" />
+      <Control Type="AR.Label" Name="Label7" Left="72" Top="2592" Width="1296" Height="288.0001" Caption="DIRECTOR:" />
+      <Control Type="AR.Label" Name="Label43" Left="2016" Top="2592" Width="1296" Height="288.0001" Caption="ID NR:" />
+      <Control Type="AR.Field" Name="TextBox12" DataField="CustomerDirectorID1" Left="2016" Top="2808" Width="1296" Height="288" Text="9999999999999" Style="font-size: 8.25pt; " />
+      <Control Type="AR.Field" Name="TextBox38" DataField="CustomerDirectorID2" Left="2016" Top="3024" Width="1296" Height="288" Text="9999999999999" Style="font-size: 8.25pt; " />
+      <Control Type="AR.Field" Name="TextBox39" DataField="CustomerDirectorID3" Left="2016" Top="3240" Width="1296" Height="288" Text="9999999999999" Style="font-size: 8.25pt; " />
+      <Control Type="AR.Field" Name="TextBox40" DataField="CustomerDirectorID4" Left="2016" Top="3456" Width="1296" Height="288" Text="9999999999999" Style="font-size: 8.25pt; " />
+      <Control Type="AR.Field" Name="TextBox41" DataField="CustomerDirector1" Left="72" Top="2808" Width="1872" Height="288" Text="Director" Style="font-size: 8.25pt; " />
+      <Control Type="AR.Field" Name="TextBox42" DataField="CustomerDirector2" Left="72" Top="3024" Width="1872" Height="288.0001" Text="Director" Style="font-size: 8.25pt; " />
+      <Control Type="AR.Field" Name="TextBox43" DataField="CustomerDirector3" Left="72" Top="3240" Width="1872" Height="287.9999" Text="Director" Style="font-size: 8.25pt; " />
+      <Control Type="AR.Field" Name="TextBox44" DataField="CustomerDirector4" Left="72" Top="3456" Width="1872" Height="288" Text="Director" Style="font-size: 8.25pt; " />
+      <Control Type="AR.Label" Name="Label44" Left="3528" Top="2664" Width="2016" Height="288" Caption="COMPANY REG NR.:" />
+      <Control Type="AR.Label" Name="Label45" Left="3528" Top="2952" Width="2016" Height="288" Caption="COMPANY VAT NR.:" />
+      <Control Type="AR.Label" Name="Label46" Left="3528" Top="3240" Width="2016" Height="288" Caption="MANAGER:" />
+      <Control Type="AR.Field" Name="TextBox45" DataField="CustomerRegNr" Left="5544" Top="2664" Width="4464" Height="288" Text="regnr" />
+      <Control Type="AR.Field" Name="TextBox46" DataField="CustomerVAT" Left="5544" Top="2952" Width="4464" Height="288" Text="vat" />
+      <Control Type="AR.Field" Name="TextBox47" DataField="CustomerManager" Left="5544" Top="3240" Width="4464" Height="288" Text="manager" />
+    </Section>
+    <Section Type="PageFooter" Name="PageFooter1" Height="0" BackColor="16777215" />
+  </Sections>
+  <ReportComponentTray />
+  <PageSettings LeftMargin="1080" RightMargin="576" TopMargin="720" BottomMargin="720" />
+  <Parameters>
+    <Parameter Key="pJobID" DefaultValue="" />
+  </Parameters>
+</ActiveReportsLayout>

@@ -1,0 +1,67 @@
+﻿
+
+<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <!--<PublishTrimmed>true</PublishTrimmed>-->
+    <!--<PublishReadyToRun>true</PublishReadyToRun>-->
+    <PublishSingleFile>true</PublishSingleFile>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <CefSharpAnyCpuSupport>true</CefSharpAnyCpuSupport>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CefSharp.WinForms" Version="75.1.142" />
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.6">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.0.0" />
+    <PackageReference Include="Microsoft.Identity.Client" Version="4.4.0" />
+    <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="5.2.3" />
+    <PackageReference Include="Microsoft.IdentityModel.Protocols.OpenIdConnect" Version="5.6.0" />
+    <PackageReference Include="Microsoft.Windows.Compatibility" Version="3.0.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.6.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Jobcard.Core\Jobcard.Core.csproj" />
+    <ProjectReference Include="..\Jobcard.Data\Jobcard.Data.csproj" />
+    <ProjectReference Include="..\JobCardDAL\JobCardDAL.csproj" />
+    <ProjectReference Include="..\JobCardFunctions\JobCardFunctions.csproj" />
+    <ProjectReference Include="..\JobReport\JobReport.csproj" />
+    <ProjectReference Include="..\ReytecCryptoFramework\ReytecCryptoFramework.csproj" />
+    <ProjectReference Include="..\ReytecDataFramework\ReytecDataFramework.csproj" />
+    <ProjectReference Include="..\ReytecDataLookupWindow\ReytecDataLookupWindow\ReytecDataLookupWindow.csproj" />
+    <ProjectReference Include="..\ReytecSoftButton\ReytecSoftButton\ReytecSoftButton.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="ActiveReports.Chart">
+      <HintPath>..\assemblies\ActiveReports.Chart.dll</HintPath>
+    </Reference>
+    <Reference Include="ActiveReports.PdfExport">
+      <HintPath>..\assemblies\ActiveReports.PdfExport.dll</HintPath>
+    </Reference>
+    <Reference Include="ActiveReports.Viewer3">
+      <HintPath>..\assemblies\ActiveReports.Viewer3.dll</HintPath>
+    </Reference>
+    <Reference Include="ActiveReports3">
+      <HintPath>..\assemblies\ActiveReports3.dll</HintPath>
+    </Reference>
+    <Reference Include="Interop.Microsoft.Office.Interop.Outlook">
+      <HintPath>..\assemblies\Interop.Microsoft.Office.Interop.Outlook.DLL</HintPath>
+    </Reference>
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <None Update="WildlifeThatch.jcc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>
