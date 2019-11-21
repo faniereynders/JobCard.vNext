@@ -1,33 +1,45 @@
 ﻿using Microsoft.Toolkit.Forms.UI.Controls;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using Windows.Foundation.Metadata;
 using Windows.UI.Xaml;
 
 namespace JobCard.Security
 {
+    
+
     public partial class AzureLoginForm : Form
     {
         private readonly WebView webview = new WebView();
+
+       
         public AzureLoginForm()
         {
             InitializeComponent();
 
-            ((ISupportInitialize)webview).BeginInit();
-            webview.Dock = DockStyle.Fill;
-            webview.ControlAdded += Webview_ControlAdded;
-             Controls.Add(webview);
-            //  ((ISupportInitialize)webview).EndInit();
+            Init();
 
-            Controls.Add(new Button { Name = "sss", Location = new Point(10, 10) });
+            webview.Navigate("https://google.com");
         }
 
-        private void Webview_ControlAdded(object sender, ControlEventArgs e)
+
+        private void Init()
         {
-            WebView.Navigate("https://www.google.com");
+            ((ISupportInitialize)webview).BeginInit();
+            webview.Dock = DockStyle.Fill;
+            
+            Controls.Add(webview);
+            ((ISupportInitialize)webview).EndInit();
+        }
+
+        public void Navigate(string url)
+        {
+            WebView.Navigate(url);
         }
 
         public WebView WebView => webview;

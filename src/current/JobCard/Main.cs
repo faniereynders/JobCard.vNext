@@ -1312,10 +1312,12 @@ namespace Reytec.JobCard.Core
             }
             catch (MsalUiRequiredException ex)
             {
+                var login = serviceProvider.GetService<AzureLoginCustomWebUi>();
                 var builder = clientApp.AcquireTokenInteractive(scopes)
                                        .WithPrompt(Prompt.SelectAccount)
-                                       .WithCustomWebUi(new AzureLoginCustomWebUi());
+                                       .WithCustomWebUi(login);
 
+             //   JobFunctions.ShowBodyForm(this.pnlBody, new AzureLoginForm(), this.lblTitle);
                 result = await builder.ExecuteAsync();
             }
 
@@ -1374,6 +1376,7 @@ namespace Reytec.JobCard.Core
             var frmConnection = serviceProvider.GetService<frmConnection>();
             // frmConnection.CompanyNameChanged += new frmConnection.CompanyNameChangedEventHandler(this.CompanyNameChanged);
             JobFunctions.ShowBodyForm(this.pnlBody, (Form)frmConnection, this.lblTitle);
+            //JobFunctions.ShowBodyForm(this.pnlBody, serviceProvider.GetService<AzureLoginForm>(), this.lblTitle);
         }
 
         public void ReadFromFile(string filename)
