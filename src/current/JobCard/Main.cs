@@ -5,7 +5,10 @@
 // Assembly location: C:\dev\Reytec JobCard\Reytec JobCard\JobCard.exe
 
 using JobCard;
+using JobCard.Security;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Identity.Client;
+using Microsoft.Identity.Client.Extensibility;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Protocols;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
@@ -27,6 +30,7 @@ using System.Globalization;
 using System.IdentityModel.Selectors;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Security.Claims;
@@ -1174,34 +1178,25 @@ namespace Reytec.JobCard.Core
             this.sql = new DataAccess(ConnectionInfo.GlobalConnection);
 
 
-            var tokenString = (await LoginWithAzureAD()).Trim();
+            var authenticationResult = await LoginWithAzureAD();
 
-            try
-            {
-                IdentityModelEventSource.ShowPII = true;
-               // tokenString = File.ReadAllText("token.txt");
+            var client = new HttpClient();
+            var header = authenticationResult.CreateAuthorizationHeader();
+            client.DefaultRequestHeaders.Add("Authorization", header);
+            var response = await client.GetAsync("https://graph.microsoft.com/v1.0/me");
+            var content = await response.Content.ReadAsStringAsync();
 
-
-
-
-                var token = await validateJwtTokenAsync(tokenString);
-            }
-            catch (Exception ex)
-            {
-
-                throw;
-            }
-           
+            MessageBox.Show(content);
 
             //frmLogin frmLogin = new frmLogin();
             //frmLogin.LoginSuccessfull += new frmLogin.LoginSuccessfullEventHandler(this.SignInSuccess);
             //int num = (int)frmLogin.ShowDialog(this);
         }
 
-      
-    
 
-    private static async Task<SecurityToken> validateJwtTokenAsync(string token)
+
+
+        private static async Task<SecurityToken> validateJwtTokenAsync(string token)
         {
             const string TENANT = "1830360c-5d89-409b-8fa4-27204b64c85e";
             const string AUDIENCE = "00000003-0000-0000-c000-000000000000";
@@ -1251,46 +1246,57 @@ namespace Reytec.JobCard.Core
             //return validatedToken;
         }
 
-        private async Task<string> LoginWithAzureAD()
+        private async Task<AuthenticationResult> LoginWithAzureAD()
         {
-            var handle = this.Handle.ToString();
-            return await Task.Run(() =>
+            var clientId = "8898135d-4300-4ef2-b007-c62d827a2743";
+            var tenant = "organizations";
+            var scopes = new string[] { "user.read", "GroupMember.Read.All" };
+
+            var clientApp = PublicClientApplicationBuilder.Create(clientId)
+                .WithRedirectUri("http://localhost:5000/auth")
+                .WithAuthority(AzureCloudInstance.AzurePublic, tenant)
+                .Build();
+
+            TokenCacheHelper.EnableSerialization(clientApp.UserTokenCache);
+
+            IdentityModelEventSource.ShowPII = true;
+
+            var result = default(AuthenticationResult);
+            var accounts = await clientApp.GetAccountsAsync();
+            try
             {
-                const string proxy = @"C:\dev\JobCard\old\Source\AzureLoginProxy\bin\Debug\AzureLoginProxy.exe";
+                result = await clientApp.AcquireTokenSilent(scopes, accounts.FirstOrDefault())
+                       .ExecuteAsync();
+            }
+            catch (MsalUiRequiredException ex)
+            {
+                var builder = clientApp.AcquireTokenInteractive(scopes)
+                                       .WithPrompt(Prompt.SelectAccount)
+                                       .WithCustomWebUi(new AzureLoginCustomWebUi());
 
+                result = await builder.ExecuteAsync();
+            }
 
-                var startInfo = new ProcessStartInfo
-                {
-                    FileName = proxy,
-                    UseShellExecute = false,
-                    RedirectStandardOutput = true,
-                    CreateNoWindow = true,
-                   
-                    
-                };
-
-                startInfo.Arguments = handle;
-
-                var process = Process.Start(startInfo);
-
-               // process.MainWindowHandle = this.Handle;
-
-                Program.LoginProxy = process;
-                //
-                // Read in all the text from the process with the StreamReader.
-                //
-                using (StreamReader reader = process.StandardOutput)
-                {
-                    string result = reader.ReadToEnd();
-                    File.WriteAllText("token.txt", result);
-                    return result;
-                }
-
-
-
-
-            }).ConfigureAwait(false);
+            return result;
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         public void ChangeState()
         {
@@ -1514,13 +1520,13 @@ namespace Reytec.JobCard.Core
             this.SignIn = false;
             this.commandfile = "";
             this.InitializeComponent();
-           // this.
+            // this.
             this.serviceProvider = serviceProvider;
         }
 
         private void Main_Activated(object sender, EventArgs e)
         {
-          //  throw new NotImplementedException();
+            //  throw new NotImplementedException();
         }
 
         private void btnSign_Click_1(object sender, EventArgs e)

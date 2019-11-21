@@ -24,8 +24,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jobcard.Data", "..\Jobcard.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jobcard.Core", "..\Jobcard.Core\Jobcard.Core.csproj", "{5299A685-2F34-4984-8BE4-86C465DDA97F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureLoginProxy", "..\AzureLoginProxy\AzureLoginProxy.csproj", "{3EB67FF3-61CB-4AA5-B394-E249CFFE540A}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -72,10 +70,6 @@ Global
 		{5299A685-2F34-4984-8BE4-86C465DDA97F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5299A685-2F34-4984-8BE4-86C465DDA97F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5299A685-2F34-4984-8BE4-86C465DDA97F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3EB67FF3-61CB-4AA5-B394-E249CFFE540A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3EB67FF3-61CB-4AA5-B394-E249CFFE540A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3EB67FF3-61CB-4AA5-B394-E249CFFE540A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3EB67FF3-61CB-4AA5-B394-E249CFFE540A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
