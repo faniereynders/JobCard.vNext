@@ -23,11 +23,6 @@ using System.Windows.Forms;
 
 namespace JobCard
 {
-    public static class ApplicationState
-    {
-        public static Uri AuthorizationCallbackUri;
-        public static IntPtr LoginWindowHandle;
-    }
     static class Program
     {
 

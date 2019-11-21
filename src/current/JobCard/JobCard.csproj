@@ -28,6 +28,7 @@
     <PackageReference Include="Microsoft.Toolkit.Forms.UI.Controls.WebView" Version="6.0.0" />
     <PackageReference Include="Microsoft.Windows.Compatibility" Version="3.0.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.6.0" />
+    <PackageReference Include="System.Net.Http" Version="4.3.4" />
     <PackageReference Include="WebWindow" Version="0.1.0-20191120.6" />
   </ItemGroup>
 

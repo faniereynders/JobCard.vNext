@@ -34,6 +34,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Security.Claims;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -1183,10 +1184,51 @@ namespace Reytec.JobCard.Core
             var client = new HttpClient();
             var header = authenticationResult.CreateAuthorizationHeader();
             client.DefaultRequestHeaders.Add("Authorization", header);
-            var response = await client.GetAsync("https://graph.microsoft.com/v1.0/me");
-            var content = await response.Content.ReadAsStringAsync();
 
-            MessageBox.Show(content);
+
+
+            var jsonOptions = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            };
+
+            var profileResponse = client.GetAsync("https://graph.microsoft.com/v1.0/me");
+            var groupResponse = client.GetAsync("https://graph.microsoft.com/v1.0/me/memberOf");
+            var organizationResponse = client.GetAsync("https://graph.microsoft.com/v1.0/organization");
+
+            await Task.WhenAll(profileResponse, groupResponse, organizationResponse);
+
+            var profileContent = profileResponse.Result.Content.ReadAsStringAsync();
+            var groupContent = groupResponse.Result.Content.ReadAsStringAsync();
+            var organizationContent = organizationResponse.Result.Content.ReadAsStringAsync();
+
+            await Task.WhenAll(profileContent, groupContent, organizationContent);
+
+            var azureUser = JsonSerializer.Deserialize<AzureADUserDto>(profileContent.Result, jsonOptions);
+            var azureUserGroups = JsonSerializer.Deserialize<AzureADUserGroupsDto>(groupContent.Result, jsonOptions);
+            var azureOrganization = JsonSerializer.Deserialize<AzureADOrganizationsDto>(organizationContent.Result, jsonOptions);
+
+
+            var organization = new Organization
+            {
+                DisplayName = azureOrganization.Value.First().DisplayName,
+                Id = azureOrganization.Value.First().Id
+            };
+
+            var applicationUser = new ApplicationUser
+            {
+                DisplayName = azureUser.DisplayName,
+                Id = azureUser.Id,
+                Groups = azureUserGroups.Value.Select(g =>
+                    new UserGroup { Id = g.Id, DisplayName = g.DisplayName })
+            };
+
+            ApplicationState.User = applicationUser;
+            ApplicationState.Organization = organization;
+
+          //  MessageBox.Show(content);
+
+            SignInSuccess();
 
             //frmLogin frmLogin = new frmLogin();
             //frmLogin.LoginSuccessfull += new frmLogin.LoginSuccessfullEventHandler(this.SignInSuccess);
@@ -1302,11 +1344,11 @@ namespace Reytec.JobCard.Core
         {
             if (this.SignIn)
             {
-                this.lblCompanyName.Text = this.sql.GetScalar("select companyname from companyinfo where companyid=1");
+                this.lblCompanyName.Text = ApplicationState.Organization.DisplayName;
                 this.stlblCompanyName.Image = this.ImageList1.Images[0];
                 this.stlblCompanyName.Text = "Connected to " + this.lblCompanyName.Text;
                 this.pnlMenu.Enabled = true;
-                this.lblUser.Text = JobFunctions.LoggedUser;
+                this.lblUser.Text = ApplicationState.User.DisplayName;
             }
             else
             {
