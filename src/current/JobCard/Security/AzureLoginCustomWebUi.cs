@@ -34,8 +34,7 @@ namespace JobCard.Security
         {
             JobFunctions.ShowBodyForm(mainForm.pnlBody, azureLoginForm, mainForm.lblTitle);
             azureLoginForm.Navigate(authorizationUri.ToString());
-            
-
+            azureLoginForm.WaitUntilDone();
             return Task.FromResult(ApplicationState.AuthorizationCallbackUri);
         }
     }
