@@ -19,17 +19,11 @@ namespace JobCard
             public string DisplayName { get; set; }
         }
     }
-    public class ApplicationUser
-    {
-        public string Id { get; set; }
-        public string DisplayName { get; set; }
-        public IEnumerable<UserGroup> Groups { get; set; }
+    
 
-    }
-
-    public class Organization
-    {
-        public string Id { get; set; }
-        public string DisplayName { get; set; }
-    }
+    //public class Organization
+    //{
+    //    public string Id { get; set; }
+    //    public string DisplayName { get; set; }
+    //}
 }

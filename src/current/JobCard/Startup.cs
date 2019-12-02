@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Graph;
 using Reytec.JobCard.Core;
 using Reytec.JobCard.DAL;
 using System;
@@ -22,12 +23,16 @@ namespace JobCard
         public void ConfigureServices(IServiceCollection serviceCollection)
         {
             serviceCollection
-                .AddSingleton(sp => new Main(sp))
+                //.AddSingleton(sp => new Main(sp))
+                .AddSingleton<Main>()
                 .AddSingleton<AzureLoginForm>()
                 .AddSingleton<AzureLoginCustomWebUi>()
                 .AddSingleton<frmConnection>()
                 .AddSingleton<JobCardCompany>()
                 .AddSingleton(Reytec.JobCard.Core.ConnectionInfo.GlobalConnection)
+                .AddSingleton<GraphServiceClient>()
+                .AddSingleton<IAuthenticationFlow, AzureADAuthenticationFlow>()
+                .AddSingleton<IAuthenticationProvider, AzureADAuthenticationProvider>()
                 .AddSingleton<ICompanyConnectionRepository, CompanyConnectionRepository>();
         }
         public void Configure(IApplicationBuilder app, IApplicationLifetime lifetime, Main mainForm)
@@ -35,14 +40,14 @@ namespace JobCard
             
             lifetime.ApplicationStarted.Register(()=>
             {
-                
 
-                Application.ApplicationExit += (sender,e)=>
+
+                System.Windows.Forms.Application.ApplicationExit += (sender,e)=>
                 {
                     lifetime.StopApplication();
                 };
-
-                Application.Run(mainForm);
+                ApplicationState.MainForm = mainForm;
+                System.Windows.Forms.Application.Run(mainForm);
             });
 
             app.Run(async (context) =>

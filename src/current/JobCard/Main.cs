@@ -5,8 +5,10 @@
 // Assembly location: C:\dev\Reytec JobCard\Reytec JobCard\JobCard.exe
 
 using JobCard;
+using JobCard.Core;
 using JobCard.Security;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Graph;
 using Microsoft.Identity.Client;
 using Microsoft.Identity.Client.Extensibility;
 using Microsoft.IdentityModel.Logging;
@@ -37,6 +39,7 @@ using System.Security.Claims;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Image = System.Drawing.Image;
 
 namespace Reytec.JobCard.Core
 {
@@ -109,6 +112,8 @@ namespace Reytec.JobCard.Core
         [AccessedThroughProperty("frmCompanyConnect")]
         private frmConnection _frmCompanyConnect;
         private readonly IServiceProvider serviceProvider;
+        private readonly GraphServiceClient graphServiceClient;
+        private readonly IAuthenticationFlow authenticationFlow;
 
         [DebuggerNonUserCode]
         protected override void Dispose(bool disposing)
@@ -864,6 +869,7 @@ namespace Reytec.JobCard.Core
             }
         }
 
+    
         internal virtual Panel pnlBody
         {
             [DebuggerNonUserCode]
@@ -1180,61 +1186,56 @@ namespace Reytec.JobCard.Core
 
             try
             {
-                var authenticationResult = await LoginWithAzureAD();
+                // var authenticationResult = await LoginWithAzureAD();
 
-                var client = new HttpClient();
-                var header = authenticationResult.CreateAuthorizationHeader();
-                client.DefaultRequestHeaders.Add("Authorization", header);
+                await SignInAsync();
+               
 
+                var userDto = await graphServiceClient.Me.Request().GetAsync();
+                var userGroupsDto = await graphServiceClient.Me.MemberOf.Request().GetAsync();
+                var organizationDto = await graphServiceClient.Organization.Request().GetAsync();
 
+                
+                //await Task.WhenAll(userDto, userGroupsDto, organizationDto);
 
-                var jsonOptions = new JsonSerializerOptions
+                var firstOrganizationResult = organizationDto.First();
+                var organization = new OrganizationEntity
                 {
-                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                    DisplayName = firstOrganizationResult.DisplayName,
+                    Id = firstOrganizationResult.Id
                 };
 
-                var profileResponse = client.GetAsync("https://graph.microsoft.com/v1.0/me");
-                var groupResponse = client.GetAsync("https://graph.microsoft.com/v1.0/me/memberOf");
-                var organizationResponse = client.GetAsync("https://graph.microsoft.com/v1.0/organization");
-
-                await Task.WhenAll(profileResponse, groupResponse, organizationResponse);
-
-                var profileContent = profileResponse.Result.Content.ReadAsStringAsync();
-                var groupContent = groupResponse.Result.Content.ReadAsStringAsync();
-                var organizationContent = organizationResponse.Result.Content.ReadAsStringAsync();
-
-                await Task.WhenAll(profileContent, groupContent, organizationContent);
-
-                var azureUser = JsonSerializer.Deserialize<AzureADUserDto>(profileContent.Result, jsonOptions);
-                var azureUserGroups = JsonSerializer.Deserialize<AzureADUserGroupsDto>(groupContent.Result, jsonOptions);
-                var azureOrganization = JsonSerializer.Deserialize<AzureADOrganizationsDto>(organizationContent.Result, jsonOptions);
-
-
-                var organization = new Organization
-                {
-                    DisplayName = azureOrganization.Value.First().DisplayName,
-                    Id = azureOrganization.Value.First().Id
-                };
-
+                var userResult = userDto;
+                var userGroupsResult = userGroupsDto.ToList();
                 var applicationUser = new ApplicationUser
                 {
-                    DisplayName = azureUser.DisplayName,
-                    Id = azureUser.Id,
-                    Groups = azureUserGroups.Value.Select(g =>
-                        new UserGroup { Id = g.Id, DisplayName = g.DisplayName })
+                    DisplayName = userResult.DisplayName,
+                    Id = userResult.Id,
+                    Groups = userGroupsResult.Cast<Group>().Select(g =>
+                        new UserGroup { Id = g.Id, DisplayName = g.DisplayName }).ToList()
                 };
+
+                
 
                 ApplicationState.User = applicationUser;
                 ApplicationState.Organization = organization;
+            }
+            catch (Exception ex) when (ex.HResult == -2146233088)
+            {
+
+                if (true)
+                {
+
+                }
             }
             catch (Exception ex)
             {
 
                 throw;
             }
-            
 
-          //  MessageBox.Show(content);
+
+            //  MessageBox.Show(content);
 
             SignInSuccess();
 
@@ -1243,8 +1244,7 @@ namespace Reytec.JobCard.Core
             //int num = (int)frmLogin.ShowDialog(this);
         }
 
-
-
+        private Task SignInAsync() => authenticationFlow.SignInAsync();
 
         private static async Task<SecurityToken> validateJwtTokenAsync(string token)
         {
@@ -1322,7 +1322,7 @@ namespace Reytec.JobCard.Core
             {
                 var login = serviceProvider.GetService<AzureLoginCustomWebUi>();
                 var builder = clientApp.AcquireTokenInteractive(scopes)
-                                       .WithPrompt(Prompt.SelectAccount)
+                                       .WithPrompt(Microsoft.Identity.Client.Prompt.SelectAccount)
                                        .WithCustomWebUi(login);
 
              //   JobFunctions.ShowBodyForm(this.pnlBody, new AzureLoginForm(), this.lblTitle);
@@ -1392,7 +1392,7 @@ namespace Reytec.JobCard.Core
             try
             {
                 string[] strArray1 = new string[1];
-                string[] strArray2 = Strings.Split(File.ReadAllText(filename), "\r\n", -1, CompareMethod.Binary);
+                string[] strArray2 = Strings.Split(System.IO.File.ReadAllText(filename), "\r\n", -1, CompareMethod.Binary);
                 this.CompanyFileName = strArray2[0];
                 this.ServerName = strArray2[1];
                 this.DatabaseName = strArray2[2];
@@ -1428,10 +1428,10 @@ namespace Reytec.JobCard.Core
             //        return;
             //    }
             //}
-            this.ReadFromFile(Application.StartupPath + "\\Default.jcc");
+            this.ReadFromFile(System.Windows.Forms.Application.StartupPath + "\\Default.jcc");
             if (Operators.CompareString(this.CompanyFileName, "", false) != 0)
             {
-                this.OpenCompany(Application.StartupPath + "\\" + this.DatabaseName + ".jcc");
+                this.OpenCompany(System.Windows.Forms.Application.StartupPath + "\\" + this.DatabaseName + ".jcc");
                 if (this.SignIn)
                     return;
                 this.SignOut();
@@ -1565,7 +1565,7 @@ namespace Reytec.JobCard.Core
             frmBackup.ShowDialog();
         }
 
-        public Main(IServiceProvider serviceProvider)
+        public Main(IServiceProvider serviceProvider, GraphServiceClient graphServiceClient, IAuthenticationFlow authenticationFlow)
         {
             this.Load += new EventHandler(this.Main_Load);
             this.Resize += new EventHandler(this.Main_Resize);
@@ -1575,6 +1575,8 @@ namespace Reytec.JobCard.Core
             this.InitializeComponent();
             // this.
             this.serviceProvider = serviceProvider;
+            this.graphServiceClient = graphServiceClient;
+            this.authenticationFlow = authenticationFlow;
         }
 
         private void Main_Activated(object sender, EventArgs e)

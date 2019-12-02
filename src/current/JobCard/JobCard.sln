@@ -22,7 +22,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobReport", "..\JobReport\J
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jobcard.Data", "..\Jobcard.Data\Jobcard.Data.csproj", "{B60694F4-DEDE-4699-AAF0-0AF96C804C6F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jobcard.Core", "..\Jobcard.Core\Jobcard.Core.csproj", "{5299A685-2F34-4984-8BE4-86C465DDA97F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobCard.Core", "..\Jobcard.Core\JobCard.Core.csproj", "{5299A685-2F34-4984-8BE4-86C465DDA97F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
