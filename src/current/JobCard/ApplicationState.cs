@@ -1,4 +1,5 @@
-﻿using JobCard.Core;
+﻿using JobCard.Application.UI;
+using JobCard.Core;
 using Reytec.JobCard.Core;
 using System;
 using System.Windows.Forms;

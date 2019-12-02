@@ -1,4 +1,5 @@
 ﻿using Microsoft.Graph;
+using Microsoft.Identity.Client;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,7 +10,7 @@ namespace JobCard.Security
     public interface IAuthenticationFlow
     {
         string AuthorizationHeader { get; }
-        Task SignInAsync();
+        Task<AuthenticationResult> SignInAsync();
         Task SignOutAsync();
     }
 

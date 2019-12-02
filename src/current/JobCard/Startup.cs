@@ -1,4 +1,5 @@
 ﻿using Jobcard.Data;
+using JobCard.Application.UI;
 using JobCard.Security;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
