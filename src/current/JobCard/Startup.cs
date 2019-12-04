@@ -1,5 +1,7 @@
-﻿using Jobcard.Data;
+﻿using AutoMapper;
+using Jobcard.Data;
 using JobCard.Application.UI;
+using JobCard.Infrastructure.MappingProfiles;
 using JobCard.Security;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -25,6 +27,7 @@ namespace JobCard
         {
             serviceCollection
                 //.AddSingleton(sp => new Main(sp))
+                .AddAutoMapper(typeof(MappingProfile))
                 .AddSingleton<Main>()
                 .AddSingleton<AzureLoginForm>()
                 .AddSingleton<AzureLoginCustomWebUi>()

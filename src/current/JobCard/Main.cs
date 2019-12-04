@@ -3,32 +3,31 @@ using JobCard.Security;
 using Microsoft.Graph;
 using Reytec.Data.Engine;
 using Reytec.JobCard.Core;
-using Reytec.JobCard.DAL;
 using Reytec.JobCard.Functions.GUITransformation;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualBasic;
-using Microsoft.VisualBasic.CompilerServices;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Protocols;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using AutoMapper;
+using System.Collections.Generic;
 
 namespace JobCard.Application.UI
 {
     public partial class Main
     {
+        private readonly IMapper mapper;
         private readonly frmConnection frmConnection;
 
         
-        public Main(frmConnection frmConnection, GraphServiceClient graphServiceClient, IAuthenticationFlow authenticationFlow)
+        public Main(IMapper mapper, frmConnection frmConnection, GraphServiceClient graphServiceClient, IAuthenticationFlow authenticationFlow)
         {
             this.InitializeComponent();
+            this.mapper = mapper;
             // this.
             this.frmConnection = frmConnection;
             this.graphServiceClient = graphServiceClient;
@@ -66,28 +65,21 @@ namespace JobCard.Application.UI
             {
                 await authenticationFlow.SignInAsync();
 
-                var userDto = graphServiceClient.Me.Request().GetAsync();
-                var userGroupsDto = graphServiceClient.Me.MemberOf.Request().GetAsync();
-                var organizationDto = graphServiceClient.Organization.Request().GetAsync();
+                var userProfileTask = graphServiceClient.Me.Request().GetAsync();
+                var userGroupsTask = graphServiceClient.Me.MemberOf.Request().GetAsync();
+                var organizationTask = graphServiceClient.Organization.Request().GetAsync();
 
-                await Task.WhenAll(userDto, userGroupsDto, organizationDto);
+                await Task.WhenAll(userProfileTask, userGroupsTask, organizationTask);
 
-                var firstOrganizationResult = organizationDto.Result.First();
-                var organization = new OrganizationEntity
-                {
-                    DisplayName = firstOrganizationResult.DisplayName,
-                    Id = firstOrganizationResult.Id
-                };
+                var firstOrganizationResult = organizationTask.Result.First();
 
-                var userResult = userDto.Result;
-                var userGroupsResult = userGroupsDto.Result.ToList();
-                var applicationUser = new ApplicationUser
-                {
-                    DisplayName = userResult.DisplayName,
-                    Id = userResult.Id,
-                    Groups = userGroupsResult.Cast<Microsoft.Graph.Group>().Select(g =>
-                        new UserGroup { Id = g.Id, DisplayName = g.DisplayName }).ToList()
-                };
+                var organization = mapper.Map<OrganizationEntity>(firstOrganizationResult);
+
+                var userResult = userProfileTask.Result;
+                var userGroupsResult = userGroupsTask.Result.OfType<Microsoft.Graph.Group>();
+                var userWithGroups = new Tuple<Microsoft.Graph.User, IEnumerable<Microsoft.Graph.Group>>(userResult, userGroupsResult);
+
+                var applicationUser = mapper.Map<ApplicationUser>(userWithGroups);
 
                 ApplicationState.User = applicationUser;
                 ApplicationState.Organization = organization;
@@ -96,64 +88,17 @@ namespace JobCard.Application.UI
             catch (Microsoft.Identity.Client.MsalException ex)
             {
 
-                SignIn();
+                //SignIn();
             }
-            
+            catch (Exception ex)
+            {
+                throw ex;
+            }
             //var token = await validateJwtTokenAsync(result.IdToken);
             //if (token.)
             //{
 
             //}
-        }
-
-        private static async Task<SecurityToken> validateJwtTokenAsync(string token)
-        {
-            const string TENANT = "1830360c-5d89-409b-8fa4-27204b64c85e";
-            const string AUDIENCE = "00000003-0000-0000-c000-000000000000";
-            const string CLIENT_ID = "8898135d-4300-4ef2-b007-c62d827a2743";
-            // Build URL based on your AAD-TenantId
-            string stsDiscoveryEndpoint = "https://login.microsoftonline.com/common/v2.0/.well-known/openid-configuration";
-            var handler = new JwtSecurityTokenHandler();
-            ConfigurationManager<OpenIdConnectConfiguration> configManager = new ConfigurationManager<OpenIdConnectConfiguration>(stsDiscoveryEndpoint, new OpenIdConnectConfigurationRetriever());
-            OpenIdConnectConfiguration config = configManager.GetConfigurationAsync().Result;
-
-            try
-            {
-
-
-
-
-
-
-                TokenValidationParameters validationParameters = new TokenValidationParameters
-                {
-                    ValidIssuers = new[] { $"https://login.microsoftonline.com/{TENANT}/v2.0" },
-                    ValidAudiences = new[] { CLIENT_ID, "https://graph.windows.net" },
-                    ValidateAudience = false,
-                    ValidateIssuer = true,
-                    IssuerSigningKeys = config.SigningKeys,
-                    ValidateLifetime = true
-                };
-                var tokenHandler = new JwtSecurityTokenHandler();
-                SecurityToken validatedToken = null;
-
-
-
-
-
-
-                tokenHandler.ValidateToken(token, validationParameters, out validatedToken);
-                return validatedToken;
-            }
-            catch (SecurityTokenInvalidSignatureException ex)
-            {
-                throw;
-            }
-            catch (SecurityTokenValidationException)
-            {
-                throw;
-            }
-            //return validatedToken;
         }
 
         public void SignOut()

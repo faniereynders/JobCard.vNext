@@ -20,7 +20,7 @@ namespace JobCard.Security
         }
         public async Task<AuthenticationResult> SignInAsync()
         {
-            var clientId = "8898135d-4300-4ef2-b007-c62d827a2743";
+            var clientId = "6a25024d-949b-43f3-b60c-3518fc1350ff";
             var tenant = "organizations";
             var scopes = new string[] { "user.read", "GroupMember.Read.All" };
 
@@ -43,7 +43,8 @@ namespace JobCard.Security
             {
                 //var login = serviceProvider.GetService<AzureLoginCustomWebUi>();
                 var builder = clientApp.AcquireTokenInteractive(scopes)
-                                       .WithPrompt(Microsoft.Identity.Client.Prompt.SelectAccount)
+                                      // .WithPrompt(Microsoft.Identity.Client.Prompt.SelectAccount)
+                                       //.WithPrompt(Microsoft.Identity.Client.Prompt.Consent)
                                        .WithCustomWebUi(azureLoginCustomWebUi);
 
                 //   JobFunctions.ShowBodyForm(this.pnlBody, new AzureLoginForm(), this.lblTitle);

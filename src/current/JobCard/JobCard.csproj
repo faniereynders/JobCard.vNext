@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <!--<PackageReference Include="CefSharp.WinForms" Version="75.1.142" />-->
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="Microsoft.AspNetCore" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.6">
@@ -37,6 +38,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Jobcard.Core\JobCard.Core.csproj" />
     <ProjectReference Include="..\Jobcard.Data\Jobcard.Data.csproj" />
+    <ProjectReference Include="..\JobCard.Infrastructure\JobCard.Infrastructure.csproj" />
     <ProjectReference Include="..\JobCardDAL\JobCardDAL.csproj" />
     <ProjectReference Include="..\JobCardFunctions\JobCardFunctions.csproj" />
     <ProjectReference Include="..\JobReport\JobReport.csproj" />
